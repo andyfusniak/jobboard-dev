@@ -1,0 +1,6 @@
+[submodule "jobboard-default-theme"]
+	path = jobboard-default-theme
+	url = git@github.com:andyfusniak/jobboard-default-theme.git
+[submodule "jobboard-admin-default-theme"]
+	path = jobboard-admin-default-theme
+	url = git@github.com:andyfusniak/jobboard-admin-default-theme.git

@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:13.1-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: jobboard
+
+  jobboard-admin:
+    image: gcr.io/codepyjamas/jobboard-dev:latest
+    command: /bin/sh -c "sleep 10 && /app/bin/jobboard-admin"
+    ports:
+      - "9002:8080"
+    environment:
+      DATABASE_URL: "postgres://postgres:password@postgres:5432/jobboard?sslmode=disable&connect_timeout=5"
+      JBCTL_DATABASE_URL: "postgres://postgres:password@postgres:5432/jobboard?sslmode=disable&connect_timeout=5"
+      SITE_BASE_URL: "http://localhost:9001"
+      ADMIN_SITE_BASE_URL: "http://localhost:9002"
+      ADMIN_TZ_NAME: "Europe/London"
+      ADMIN_THEME_PATH: ./themes/jobboard-admin-default-theme
+      ADMIN_DEVELOPMENT_MODE: "true"
+    volumes:
+      - ${PWD}/jobboard-admin-default-theme/public:/app/themes/jobboard-admin-default-theme/public
+      - ${PWD}/jobboard-admin-default-theme/templates:/app/themes/jobboard-admin-default-theme/templates
+    depends_on:
+      - postgres
+
+  jobboard-web:
+    image: gcr.io/codepyjamas/jobboard-dev:latest
+    command: /bin/sh -c "sleep 3 && jbctl migrate up && jbctl apply -f themes/jobboard-default-theme/resources/pricing.yaml && jbctl apply -f themes/jobboard-default-theme/resources/skills.yaml && jbctl install demo --confirm && /app/bin/jobboard-web"
+    ports:
+      - "9001:8080"
+    environment:
+      DATABASE_URL: "postgres://postgres:password@postgres:5432/jobboard?sslmode=disable&connect_timeout=5"
+      PORT: "8080"
+      SITE_BASE_URL: "http://localhost:9001"
+      SITE_CURRENCY: "GBP"
+      SITE_LOGO_THUMBNAIL_SIZE: "80"
+      FILESTORAGE_LOGOS_DOMAIN: "img"
+      SMTP_HOST: "${SMTP_HOST}"
+      SMTP_PORT: "${SMTP_PORT}"
+      SMTP_USERNAME: "${SMTP_USERNAME}"
+      SMTP_PASSWORD: "${SMTP_PASSWORD}"
+      SMTP_FROM: "jobs@codepyjamas.com"
+      SMTP_REPLY_TO: "jobs@codepyjamas.com"
+      STRIPE_SECRET_KEY: "${STRIPE_SECRET_KEY}"
+      STRIPE_SIGNING_SECRET: "${STRIPE_SIGNING_SECRET}"
+      STRIPE_SUCCESS_URL: "http://localhost:9001/payment-success"
+      STRIPE_CANCEL_URL: "http://localhost:9001/payment-cancel"
+      IMAGE_STORAGE_MODE: "database"
+      DEVELOPMENT_MODE: "true"
+      THEME_PATH: ./themes/jobboard-default-theme
+    volumes:
+      - ${PWD}/jobboard-default-theme/public:/app/themes/jobboard-default-theme/public
+      - ${PWD}/jobboard-default-theme/resources:/app/themes/jobboard-default-theme/resources
+      - ${PWD}/jobboard-default-theme/templates:/app/themes/jobboard-default-theme/templates
+    depends_on:
+      - postgres
