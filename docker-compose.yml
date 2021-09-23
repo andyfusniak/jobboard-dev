@@ -17,6 +17,12 @@ services:
       DATABASE_URL: "postgres://postgres:password@postgres:5432/jobboard?sslmode=disable&connect_timeout=5"
       JBCTL_DATABASE_URL: "postgres://postgres:password@postgres:5432/jobboard?sslmode=disable&connect_timeout=5"
       SITE_BASE_URL: "http://localhost:9001"
+      SMTP_HOST: "${SMTP_HOST}"
+      SMTP_PORT: "${SMTP_PORT}"
+      SMTP_USERNAME: "${SMTP_USERNAME}"
+      SMTP_PASSWORD: "${SMTP_PASSWORD}"
+      SMTP_FROM: "jobs@codepyjamas.com"
+      SMTP_REPLY_TO: "jobs@codepyjamas.com"
       ADMIN_SITE_BASE_URL: "http://localhost:9002"
       ADMIN_TZ_NAME: "Europe/London"
       ADMIN_THEME_PATH: ./themes/jobboard-admin-default-theme
