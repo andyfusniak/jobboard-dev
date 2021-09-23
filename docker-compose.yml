@@ -17,6 +17,7 @@ services:
       DATABASE_URL: "postgres://postgres:password@postgres:5432/jobboard?sslmode=disable&connect_timeout=5"
       JBCTL_DATABASE_URL: "postgres://postgres:password@postgres:5432/jobboard?sslmode=disable&connect_timeout=5"
       SITE_BASE_URL: "http://localhost:9001"
+      SYSTEM_SECRET_ACCESS_TOKEN: "${SYSTEM_SECRET_ACCESS_TOKEN}"
       SMTP_HOST: "${SMTP_HOST}"
       SMTP_PORT: "${SMTP_PORT}"
       SMTP_USERNAME: "${SMTP_USERNAME}"
@@ -28,6 +29,7 @@ services:
       ADMIN_THEME_PATH: ./themes/jobboard-admin-default-theme
       ADMIN_DEVELOPMENT_MODE: "true"
     volumes:
+      - ${PWD}/jobboard-admin-default-theme/manifest.json:/app/themes/jobboard-admin-default-theme/manifest.json
       - ${PWD}/jobboard-admin-default-theme/public:/app/themes/jobboard-admin-default-theme/public
       - ${PWD}/jobboard-admin-default-theme/templates:/app/themes/jobboard-admin-default-theme/templates
     depends_on:
@@ -42,6 +44,7 @@ services:
       DATABASE_URL: "postgres://postgres:password@postgres:5432/jobboard?sslmode=disable&connect_timeout=5"
       PORT: "8080"
       SITE_BASE_URL: "http://localhost:9001"
+      SYSTEM_SECRET_ACCESS_TOKEN: "${SYSTEM_SECRET_ACCESS_TOKEN}"
       SITE_CURRENCY: "GBP"
       SITE_LOGO_THUMBNAIL_SIZE: "80"
       FILESTORAGE_LOGOS_DOMAIN: "img"
@@ -59,6 +62,7 @@ services:
       DEVELOPMENT_MODE: "true"
       THEME_PATH: ./themes/jobboard-default-theme
     volumes:
+      - ${PWD}/jobboard-default-theme/manifest.json:/app/themes/jobboard-default-theme/manifest.json
       - ${PWD}/jobboard-default-theme/public:/app/themes/jobboard-default-theme/public
       - ${PWD}/jobboard-default-theme/resources:/app/themes/jobboard-default-theme/resources
       - ${PWD}/jobboard-default-theme/templates:/app/themes/jobboard-default-theme/templates
