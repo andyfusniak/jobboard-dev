@@ -37,7 +37,7 @@ services:
 
   jobboard-web:
     image: gcr.io/codepyjamas/jobboard-dev:latest
-    command: /bin/sh -c "sleep 3 && jbctl migrate up && jbctl apply -f themes/jobboard-default-theme/resources/pricing.yaml && jbctl apply -f themes/jobboard-default-theme/resources/skills.yaml && jbctl install demo --confirm && /app/bin/jobboard-web"
+    command: /bin/sh -c "sleep 3 && jbctl migrate up && jbctl apply -f themes/jobboard-default-theme/resources/pricing.yaml && jbctl apply -f themes/jobboard-default-theme/resources/skills.yaml && jbctl options apply -f themes/jobboard-default-theme/resources/options-defaults.toml && jbctl admin create -ptesttesttest sawasdiworn.k@gmail.com Namwa Sawasdiworn && /app/bin/jobboard-web"
     ports:
       - "9001:8080"
     environment:
