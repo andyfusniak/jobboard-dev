@@ -8,36 +8,22 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: jobboard
 
-  jobboard-admin:
-    image: gcr.io/codepyjamas/jobboard-dev:latest
-    command: /bin/sh -c "sleep 10 && /app/bin/jobboard-admin"
-    ports:
-      - "9002:8080"
+  jobboard-tools:
+    image: gcr.io/codepyjamas/jobboard-tools:latest
+    command: /bin/sh -c "sleep 5 && jbctl migrate up && jbctl apply -f themes/jobboard-default-theme/resources/pricing.yaml && jbctl apply -f themes/jobboard-default-theme/resources/skills.yaml && jbctl options apply -f themes/jobboard-default-theme/resources/options-defaults.toml && jbctl admin create -ptesttesttest sawasdiworn.k@gmail.com Namwa Sawasdiworn && tail -f themes/jobboard-default-theme/resources/options-defaults.toml"
     environment:
       DATABASE_URL: "postgres://postgres:password@postgres:5432/jobboard?sslmode=disable&connect_timeout=5"
-      JBCTL_DATABASE_URL: "postgres://postgres:password@postgres:5432/jobboard?sslmode=disable&connect_timeout=5"
       SITE_BASE_URL: "http://localhost:9001"
-      SYSTEM_SECRET_ACCESS_TOKEN: "${SYSTEM_SECRET_ACCESS_TOKEN}"
-      SMTP_HOST: "${SMTP_HOST}"
-      SMTP_PORT: "${SMTP_PORT}"
-      SMTP_USERNAME: "${SMTP_USERNAME}"
-      SMTP_PASSWORD: "${SMTP_PASSWORD}"
-      SMTP_FROM: "jobs@codepyjamas.com"
-      SMTP_REPLY_TO: "jobs@codepyjamas.com"
-      ADMIN_SITE_BASE_URL: "http://localhost:9002"
-      ADMIN_TZ_NAME: "Europe/London"
-      ADMIN_THEME_PATH: ./themes/jobboard-admin-default-theme
-      ADMIN_DEVELOPMENT_MODE: "true"
+      STRIPE_SECRET_KEY: "${STRIPE_SECRET_KEY}"
+      REED_API_KEY: "${REED_API_KEY}"
     volumes:
-      - ${PWD}/jobboard-admin-default-theme/manifest.json:/app/themes/jobboard-admin-default-theme/manifest.json
-      - ${PWD}/jobboard-admin-default-theme/public:/app/themes/jobboard-admin-default-theme/public
-      - ${PWD}/jobboard-admin-default-theme/templates:/app/themes/jobboard-admin-default-theme/templates
+      - ${PWD}/jobboard-default-theme/resources:/app/themes/jobboard-default-theme/resources
     depends_on:
       - postgres
 
   jobboard-web:
-    image: gcr.io/codepyjamas/jobboard-dev:latest
-    command: /bin/sh -c "sleep 3 && jbctl migrate up && jbctl apply -f themes/jobboard-default-theme/resources/pricing.yaml && jbctl apply -f themes/jobboard-default-theme/resources/skills.yaml && jbctl options apply -f themes/jobboard-default-theme/resources/options-defaults.toml && jbctl admin create -ptesttesttest sawasdiworn.k@gmail.com Namwa Sawasdiworn && /app/bin/jobboard-web"
+    image: gcr.io/codepyjamas/jobboard-web:latest
+    command: /bin/sh -c "sleep 10 && /app/bin/jobboard-web"
     ports:
       - "9001:8080"
     environment:
@@ -67,5 +53,32 @@ services:
       - ${PWD}/jobboard-default-theme/public:/app/themes/jobboard-default-theme/public
       - ${PWD}/jobboard-default-theme/resources:/app/themes/jobboard-default-theme/resources
       - ${PWD}/jobboard-default-theme/templates:/app/themes/jobboard-default-theme/templates
+    depends_on:
+      - postgres
+
+  jobboard-admin:
+    image: gcr.io/codepyjamas/jobboard-admin:latest
+    command: /bin/sh -c "sleep 10 && /app/bin/jobboard-admin"
+    ports:
+      - "9002:8080"
+    environment:
+      DATABASE_URL: "postgres://postgres:password@postgres:5432/jobboard?sslmode=disable&connect_timeout=5"
+      JBCTL_DATABASE_URL: "postgres://postgres:password@postgres:5432/jobboard?sslmode=disable&connect_timeout=5"
+      SITE_BASE_URL: "http://localhost:9001"
+      SYSTEM_SECRET_ACCESS_TOKEN: "${SYSTEM_SECRET_ACCESS_TOKEN}"
+      SMTP_HOST: "${SMTP_HOST}"
+      SMTP_PORT: "${SMTP_PORT}"
+      SMTP_USERNAME: "${SMTP_USERNAME}"
+      SMTP_PASSWORD: "${SMTP_PASSWORD}"
+      SMTP_FROM: "jobs@codepyjamas.com"
+      SMTP_REPLY_TO: "jobs@codepyjamas.com"
+      ADMIN_SITE_BASE_URL: "http://localhost:9002"
+      ADMIN_TZ_NAME: "Europe/London"
+      ADMIN_THEME_PATH: ./themes/jobboard-admin-default-theme
+      ADMIN_DEVELOPMENT_MODE: "true"
+    volumes:
+      - ${PWD}/jobboard-admin-default-theme/manifest.json:/app/themes/jobboard-admin-default-theme/manifest.json
+      - ${PWD}/jobboard-admin-default-theme/public:/app/themes/jobboard-admin-default-theme/public
+      - ${PWD}/jobboard-admin-default-theme/templates:/app/themes/jobboard-admin-default-theme/templates
     depends_on:
       - postgres
