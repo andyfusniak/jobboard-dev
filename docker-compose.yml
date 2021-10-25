@@ -46,7 +46,6 @@ services:
       STRIPE_SUCCESS_URL: "http://localhost:9001/payment-success"
       STRIPE_CANCEL_URL: "http://localhost:9001/payment-cancel"
       IMAGE_STORAGE_MODE: "database"
-      DEVELOPMENT_MODE: "true"
       THEME_PATH: ./themes/jobboard-default-theme
     volumes:
       - ${PWD}/jobboard-default-theme/manifest.json:/app/themes/jobboard-default-theme/manifest.json
@@ -75,7 +74,6 @@ services:
       ADMIN_SITE_BASE_URL: "http://localhost:9002"
       ADMIN_TZ_NAME: "Europe/London"
       ADMIN_THEME_PATH: ./themes/jobboard-admin-default-theme
-      ADMIN_DEVELOPMENT_MODE: "true"
     volumes:
       - ${PWD}/jobboard-admin-default-theme/manifest.json:/app/themes/jobboard-admin-default-theme/manifest.json
       - ${PWD}/jobboard-admin-default-theme/public:/app/themes/jobboard-admin-default-theme/public
