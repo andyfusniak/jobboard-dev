@@ -34,7 +34,6 @@ services:
       SITE_CURRENCY: "GBP"
       SITE_LOGO_THUMBNAIL_SIZE: "80"
       TZ_NAME: "Europe/London"
-      FILESTORAGE_LOGOS_DOMAIN: "img"
       SMTP_HOST: "${SMTP_HOST}"
       SMTP_PORT: "${SMTP_PORT}"
       SMTP_USERNAME: "${SMTP_USERNAME}"
@@ -43,9 +42,6 @@ services:
       SMTP_REPLY_TO: "jobs@codepyjamas.com"
       STRIPE_SECRET_KEY: "${STRIPE_SECRET_KEY}"
       STRIPE_SIGNING_SECRET: "${STRIPE_SIGNING_SECRET}"
-      STRIPE_SUCCESS_URL: "http://localhost:9001/payment-success"
-      STRIPE_CANCEL_URL: "http://localhost:9001/payment-cancel"
-      IMAGE_STORAGE_MODE: "database"
       THEME_PATH: ./themes/jobboard-default-theme
     volumes:
       - ${PWD}/jobboard-default-theme/manifest.json:/app/themes/jobboard-default-theme/manifest.json
