@@ -64,6 +64,7 @@ services:
       DATABASE_URL: "postgres://postgres:password@postgres:5432/jobboard?sslmode=disable&connect_timeout=5"
       JBCTL_DATABASE_URL: "postgres://postgres:password@postgres:5432/jobboard?sslmode=disable&connect_timeout=5"
       SITE_BASE_URL: "http://localhost:9001"
+      SITE_INTERNAL_BASE_URL: "http://jobboard-web:8080"
       SYSTEM_SECRET_ACCESS_TOKEN: "${SYSTEM_SECRET_ACCESS_TOKEN}"
       SMTP_HOST: "${SMTP_HOST}"
       SMTP_PORT: "${SMTP_PORT}"
